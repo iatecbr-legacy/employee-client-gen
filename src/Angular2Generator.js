@@ -21,6 +21,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
     await this.generateProject();
     await this.fixPkgJson();
     await this.changePackages();
+    await this.fixOpaqueToken();
   }
   async generateProject() {
     let langArgs = {
@@ -51,14 +52,14 @@ module.exports = class Angular2Generator extends BaseGenerator {
     let pkgfilename = this.outdir + '/package.json';
     let pkgjson = JSON.parse(fs.readFileSync(pkgfilename));
     pkgjson["scripts"]["build"] = pkgjson["scripts"]["build"].replace("typings install && ", "");
-    fs.writeFileSync(pkgfilename, JSON.stringify(pkgjson, null, 2));
+    await fs.writeFileSync(pkgfilename, JSON.stringify(pkgjson, null, 2));
   }
   async changePackages() {
     let result;
 
-    // console.log('Running npm isntall')
-    // result = await this.runcmd('npm install', this.outdir);
-    // if (!result) throw 'Could not run npm install: ' + result;
+    console.log('Running npm install')
+    result = await this.runcmd('npm install', this.outdir);
+    if (!result) throw 'Could not run npm install: ' + result;
 
     console.log('Removing the typings package...');
     result = await this.runcmd('npm uninstall --save-dev --save-peer typings', this.outdir);
@@ -79,5 +80,12 @@ module.exports = class Angular2Generator extends BaseGenerator {
     console.log('Updating node packages...')
     result = await this.runcmd('npm install --save-dev --save-peer ' + pkgs, this.outdir);
     if (!result) throw 'Could not update the node packages: ' + result;
+  }
+  async fixOpaqueToken() {
+    console.log(`Fixing package.json build script from ${this.outdir}...`);
+    let pkgfilename = this.outdir + '/variables.ts';
+    let content = fs.readFileSync(pkgfilename).toString();
+    content = content.split('OpaqueToken').join('InjectionToken');
+    await fs.writeFileSync(pkgfilename, content);
   }
 }
