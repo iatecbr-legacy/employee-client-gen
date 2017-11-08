@@ -1,0 +1,1 @@
+node src\generate.js %1
