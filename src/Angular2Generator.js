@@ -11,21 +11,23 @@ function removedirs(dirs) {
       shutil.rmtree(dir);
   }
 }
-class Angular2Generator extends BaseGenerator {
+module.exports = class Angular2Generator extends BaseGenerator {
   async generate() {
     super.generate();
     //removedirs(['api','model']);
 
+    let npmPackageName = 'iatec-ng-employeeclient';
     let langArgs = {
         'npmVersion': this.SPEC_VERSION,
-        'npmName': 'iatec-ng-employeeclient',
+        'npmName': npmPackageName,
     };
+    this.outdir = 'gen/' + npmPackageName;
     let javaArgs = [//'java',
         '-jar', this.codegenName,
         'generate',
         '-i', this.SPEC_URL,
         '-l', 'typescript-angular2',
-        '-o', 'gen/iatec-ng-employeeclient',
+        '-o', this.outdir,
     ];
     for (let k of Object.keys(langArgs)) {
       let v = langArgs[k];
@@ -34,9 +36,16 @@ class Angular2Generator extends BaseGenerator {
     console.log('Running codegen...');
     try {
       let result = await execFile('java', javaArgs);
-      console.log('Codegen success.')
+      console.log('Codegen success.');
     } catch (err) {
       console.error(err.toString());
     }
+    this.fixPkgJson();
+  }
+  fixPkgJson() {
+    let pkgfilename = this.outdir + '/package.json';
+    let pkgjson = JSON.parse(fs.readFileSync(pkgfilename));
+    pkgjson["scripts"]["build"] = pkgjson["scripts"]["build"].replace("typings install && ", "");
+    fs.writeFileSync(pkgfilename, JSON.stringify(pkgjson, null, 2));
   }
 }

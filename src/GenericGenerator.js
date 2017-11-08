@@ -11,18 +11,16 @@ function removedirs(dirs) {
       shutil.rmtree(dir);
   }
 }
-class GenericGenerator extends BaseGenerator {
+module.exports = class GenericGenerator extends BaseGenerator {
   constructor(format) {
     super();
     this.format = format;
-    console.log('passou no ctor');
   }
   parseOptions() {
     let filename = `options/${this.format}.json`;
     if (!fs.existsSync(filename))
       return false;
-    let file = fs.createReadStream(filename);
-    let content = file.read();
+    let content = fs.readFileSync(filename);
     try {
       return JSON.parse(content);
     } catch (ex) {

@@ -1,1 +1,1 @@
-node src\generate.js %1
+@node src\generate.js %1
