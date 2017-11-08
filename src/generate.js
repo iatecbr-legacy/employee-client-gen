@@ -16,5 +16,7 @@ if (args.length <=0) {
         var generator = new clss(format)
     }
     console.log(generator);
-    generator.generate();
+    generator.generate()
+        .catch(err=>console.error(err))
+        ;
 }

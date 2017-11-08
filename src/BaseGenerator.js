@@ -1,6 +1,6 @@
 const util = require('util');
 const fs = require('fs');
-
+const exec = require('child_process').exec;
 
 class BaseGenerator {
   constructor() {
@@ -24,6 +24,16 @@ class BaseGenerator {
   }
   generate() {
     this.codegenName = this.ensureCodegen();
+  }
+  runcmd(cmd, workingdir){
+    return new Promise((resolve, reject) => {
+      let child = exec(cmd, {'cwd': workingdir || process.cwd() }, (err, stdout, stderr) =>{
+        if (!err) resolve(stdout);
+        else reject(err);
+      });
+      child.stderr.pipe(process.stdout);
+      child.stdout.pipe(process.stdout);
+    });
   }
 }
 module.exports = BaseGenerator;
