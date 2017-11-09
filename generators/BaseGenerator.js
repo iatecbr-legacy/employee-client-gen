@@ -74,7 +74,7 @@ module.exports = class BaseGenerator {
       `remote add origin https://github.com/${user_name}/${repo_name}.git`,
       `pull origin master --allow-unrelated -s recursive -X ours`,
       `tag -f ${this.SPEC_VERSION}`,
-      `push -u origin master`,
+      `push --tags -u origin master`,
     ];
     for (let g of gitCommands) {
       await runcmd('git ' + g, this.outdir);
