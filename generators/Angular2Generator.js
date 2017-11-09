@@ -6,7 +6,7 @@ const BaseGenerator = require('./BaseGenerator')
 
 module.exports = class Angular2Generator extends BaseGenerator {
   async generate() {
-    super.generate();
+    await super.generate();
     
     this.pkgfilename = this.outdir + '/package.json';
     

@@ -3,6 +3,7 @@ const CONFIG = require('../config.json');
 const util = require('util');
 const fs = require('fs');
 const exec = require('child_process').exec;
+const http = require('http');
 
 module.exports = class BaseGenerator {
   constructor(format) {    
@@ -11,10 +12,11 @@ module.exports = class BaseGenerator {
     this.SPEC_VERSION = '1.0.0-preview-1';
     this.SPEC_URL = util.format('https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml', this.SPEC_VERSION);
     this.options = CONFIG.formatOptions[format];
+    
     this.outdir = 'output/' + this.options.languageArgs.npmName;
   }
   
-  ensureCodegen() {
+  async ensureCodegen() {
     let codegenName = util.format(`swagger-codegen-cli-%s.jar`, this.CODEGEN_VERSION);
     if (fs.existsSync(codegenName)) {
       console.log('Codegen was already downloaded');
@@ -23,6 +25,7 @@ module.exports = class BaseGenerator {
       console.log('Downloading codegen from', codegenUrl);
       let file = fs.createWriteStream(codegenName);
       http.get(codegenUrl, response => {
+        console.log('writing...');
         response.pipe(file);
       });
     }
@@ -48,7 +51,7 @@ module.exports = class BaseGenerator {
     await this.runcmd('java ' + javaArgs.join(' '));
   }
   async generate() {
-    this.codegenName = this.ensureCodegen();
+    this.codegenName = await this.ensureCodegen();
     await this.runCodegen();
   }
   runcmd(cmd, workingdir){
@@ -60,5 +63,8 @@ module.exports = class BaseGenerator {
       child.stderr.pipe(process.stdout);
       child.stdout.pipe(process.stdout);
     });
+  }
+  async gitPush() {
+
   }
 }
