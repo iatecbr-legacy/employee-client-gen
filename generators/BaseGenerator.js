@@ -11,7 +11,6 @@ module.exports = class BaseGenerator {
     this.CODEGEN_VERSION = '2.2.3';
     this.SPEC_URL = util.format('https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml', CONFIG.version);
     this.options = CONFIG.formatOptions[format];
-    
     this.outdir = 'output/' + this.options.languageArgs.npmName;
   }
   
