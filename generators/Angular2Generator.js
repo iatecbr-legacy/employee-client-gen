@@ -21,24 +21,25 @@ module.exports = class Angular2Generator extends BaseGenerator {
     await this.updatePeers();
     await this.fixOpaqueToken();
     await this.createModule();
-    await this.removeTsFiles();
+    await this.removeTsAndSetTsOutput();
     await this.build();
   }
   async fixBuildScript() {
     console.log(`Fixing package.json build script from ${this.outdir}...`);
-    
-    let pkgjson = JSON.parse(fs.readFileSync(this.pkgfilename));
-    delete pkgjson.scripts.postInstall;
-    pkgjson.scripts.build = 'tsc';
-    pkgjson.scripts.prepublish = 'npm run build';
-    await fs.writeFileSync(this.pkgfilename, JSON.stringify(pkgjson, null, 2));
-    
-    let tsconfigjson = JSON.parse(fs.readFileSync(this.tsconfigfilename));
-    tsconfigjson.exclude = tsconfigjson.exclude.filter(x=>!x.startsWith('typings/'));
-    delete tsconfigjson.compilerOptions.outDir;
-    tsconfigjson.compilerOptions.lib = ["es2015", "es2015.iterable", "dom"];
-    await fs.writeFileSync(this.tsconfigfilename, JSON.stringify(tsconfigjson, null, 2));
-
+    await Promise.all([
+      this.updateJson(this.pkgfilename, obj=> {
+        delete obj.scripts.postInstall;
+        obj.scripts.build = 'tsc';
+        obj.scripts.prepublish = 'npm run build';
+        return obj;  
+      }),
+      this.updateJson(this.tsconfigfilename, obj=>{
+        obj.exclude = obj.exclude.filter(x=>!x.startsWith('typings/'));
+        delete obj.compilerOptions.outDir;
+        obj.compilerOptions.lib = ["es2015", "es2015.iterable", "dom"];
+        return obj;
+      }),
+    ]);
   }
   async updatePackages() {
     let result;
@@ -55,13 +56,13 @@ module.exports = class Angular2Generator extends BaseGenerator {
   }
   async updatePeers() {
     console.log('Updating peer dependencies...');
-    let pkgjson = JSON.parse(fs.readFileSync(this.pkgfilename));
-    for (let pkg of this.pkgs2update) {
-      if (pkg.key in pkgjson.peerDependencies) {
-        pkgjson.peerDependencies[pkg.key] = pkg.value;
+    this.updateJson(this.pkgfilename, obj=> {
+      for (let pkg of this.pkgs2update) {
+        if (pkg.key in obj.peerDependencies) {
+          obj.peerDependencies[pkg.key] = pkg.value;
+        }
       }
-    }
-    await fs.writeFileSync(this.pkgfilename, JSON.stringify(pkgjson, null, 2));    
+    });
   }
   async fixOpaqueToken() {
     console.log(`Fixing package.json build script from ${this.outdir}...`);
@@ -83,12 +84,14 @@ module.exports = class Angular2Generator extends BaseGenerator {
     console.log('Running "npm run build"')
     await this.runcmd('npm run build', this.outdir);
   }
-  async removeTsFiles() {
-    await Promise.all(
-      rimraf(outdir + "/**/*.js"),
-      rimraf(outdir + "/**/*.js.map"),
-      rimraf(outdir + "/**/*.d.ts")
-    );
+  async removeTsAndSetTsOutput() {
+    await Promise.all([
+      rimraf(this.outdir + "/dist"),
+      this.updateJson(this.tsconfigfilename, obj=> {
+        delete obj.compilerOptions.outDir;
+        return obj;
+      }),
+    ]);
   }
   async publish(argv) {
     await this.runcmd('npm publish', this.outdir);
