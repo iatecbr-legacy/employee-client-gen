@@ -58,6 +58,8 @@ module.exports = class Angular2Generator extends BaseGenerator {
     console.log('Removing the typings package...');
     await this.runcmd('npm uninstall --save-dev --save-peer typings', this.outdir);
    
+    fs.unlinkSync(this.outdir + '/typings.json')
+   
     let pkglist = [
       "@angular/common@^5.0.0",
       "@angular/compiler@^5.0.0",
