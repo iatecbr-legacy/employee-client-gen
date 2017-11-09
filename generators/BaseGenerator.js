@@ -11,7 +11,7 @@ module.exports = class BaseGenerator {
     this.CODEGEN_VERSION = '2.2.3';
     this.SPEC_URL = util.format('https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml', CONFIG.version);
     this.options = CONFIG.formatOptions[format];
-    this.outdir = 'output/' + this.options.languageArgs.npmName;
+    this.outdir = 'output/' + this.options.packageName;
   }
   
   async ensureCodegen() {
@@ -38,8 +38,11 @@ module.exports = class BaseGenerator {
       '-o', this.outdir,
     ];
     if ('languageArgs' in this.options) {
-      if ('languageArgVersionName' in this.options) {
-        this.options.languageArgs[this.options.languageArgVersionName] = CONFIG.version;
+      if ('_versionNameKey' in this.options) {
+        this.options.languageArgs[this.options._versionNameKey] = CONFIG.version;
+      }
+      if ('_packageNameKey' in this.options) {
+        this.options.languageArgs[this.options._packageNameKey] = CONFIG.packageName;
       }
       Object.keys(this.options.languageArgs).forEach(k=> {
         javaArgs.push(`-D${k}=${this.options.languageArgs[k]}`);
@@ -69,8 +72,8 @@ module.exports = class BaseGenerator {
     });
   }
   async gitPush() {
-    let user_name = '';
-    let repo_name = '';
+    let user_name = this.options.packageName;
+    let repo_name = CONFIG.gitHubUsername;
     let gitCommands = [
       [`init`, ],
       [`add .`, ],

@@ -7,10 +7,9 @@
     },
     "formatOptions": {
         "angular2": {
-            "languageArgVersionName": "npmVersion",
-            "languageArgs": {
-                "npmName": "iatec-ng-employeeclient"
-            },
+            "packageName": "iatec-ng-employeeclient",
+            "_versionNameKey": "npmVersion",
+            "_packageNameKey": "npmName",
             "packagesToUpdate": {
                 "@angular/common": "^5.0.0",
                 "@angular/compiler": "^5.0.0",
