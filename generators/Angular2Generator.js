@@ -59,9 +59,8 @@ module.exports = class Angular2Generator extends BaseGenerator {
     await fs.writeFileSync(pkgfilename, content);
   }
   async createModule() {
-    let src = 'assets/angular2-api.module.ts.txt';
-    let dst = this.outdir + '/api.module.ts';
-    fs.copyFileSync(src, dst);
+    fs.copyFileSync('assets/angular2-api.module.ts.txt', this.outdir + '/api.module.ts');
+    fs.copyFileSync('assets/angular2-.npmignore.txt', this.outdir + '/.npmignore');
     fs.appendFileSync(this.outdir + '/index.ts', "\r\nexport * from './api.module';");
   }
   async npmInstall() {

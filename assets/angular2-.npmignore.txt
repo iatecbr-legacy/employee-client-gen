@@ -1,0 +1,9 @@
+.npmignore
+.gitignore
+
+/**/*.ts
+!/**/*.d.ts
+
+*.tgz
+
+demo/
