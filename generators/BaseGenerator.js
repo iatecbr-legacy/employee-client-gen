@@ -73,13 +73,14 @@ module.exports = class BaseGenerator {
     });
   }
   async gitPush() {
-    let user_name = this.options.packageName;
-    let repo_name = CONFIG.gitHubUsername;
+    let user_name = CONFIG.gitHubUsername;
+    let repo_name = this.options.packageName;
     let gitCommands = [
       [`init`, ],
       [`add .`, ],
       [`commit -m "Auto-generated commit"`, true],
-      [`remote add origin https://github.com/${user_name}/${repo_name}.git`, true],
+      [`remote rm origin`, true],
+      [`remote add origin https://github.com/${user_name}/${repo_name}.git`, ],
       [`pull origin master --allow-unrelated -s recursive -X ours`, ],
       [`tag -f ${CONFIG.version}`, ],
       [`push --tags -u origin master`, ],
