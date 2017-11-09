@@ -68,16 +68,24 @@ module.exports = class BaseGenerator {
     let user_name = '';
     let repo_name = '';
     let gitCommands = [
-      `init`,
-      `add .`,
-      `commit -m "Auto-generated commit"`,
-      `remote add origin https://github.com/${user_name}/${repo_name}.git`,
-      `pull origin master --allow-unrelated -s recursive -X ours`,
-      `tag -f ${this.SPEC_VERSION}`,
-      `push --tags -u origin master`,
+      [`init`, ],
+      [`add .`, ],
+      [`commit -m "Auto-generated commit"`, true],
+      [`remote add origin https://github.com/${user_name}/${repo_name}.git`, true],
+      [`pull origin master --allow-unrelated -s recursive -X ours`, ],
+      [`tag -f ${this.SPEC_VERSION}`, ],
+      [`push --tags -u origin master`, ],
     ];
     for (let g of gitCommands) {
-      await this.runcmd('git ' + g, this.outdir);
+      try {
+        await this.runcmd('git ' + g[0], this.outdir);
+      } catch (err) {
+        if (g.length <= 1 || !g[1])
+          throw err;
+      }
     }
+  }
+  async publish() {
+    throw 'Not implemented for this format'.
   }
 }
