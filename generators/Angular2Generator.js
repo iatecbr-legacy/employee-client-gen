@@ -14,7 +14,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
   async generate() {
     super.generate();
     
-    this.outdir = 'gen/' + this.options.languageArgs.npmName;
+    this.outdir = 'output/' + this.options.languageArgs.npmName;
     this.pkgfilename = this.outdir + '/package.json';
     
     let pkgdict = this.options.packagesToUpdate;

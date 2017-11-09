@@ -1,0 +1,26 @@
+{
+    "gitHubUsername": "iatecbr",
+    "defaultGenerator": "BaseGenerator",
+    "generators": {
+        "angular2": "Angular2Generator"
+    },
+    "formatOptions": {
+        "angular2": {
+            "languageArgVersionName": "npmVersion",
+            "languageArgs": {
+                "npmName": "iatec-ng-employeeclient"
+            },
+            "packagesToUpdate": {
+                "@angular/common": "^5.0.0",
+                "@angular/compiler": "^5.0.0",
+                "@angular/core": "^5.0.0",
+                "@angular/http": "^5.0.0",
+                "@angular/platform-browser": "^5.0.0",
+                "core-js": "^2.4.1",
+                "rxjs": "^5.5.2",
+                "typescript": "^2.4.2",
+                "zone.js": "^0.8.14"
+            }
+        }
+    }
+}
