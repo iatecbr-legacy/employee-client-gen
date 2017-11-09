@@ -70,4 +70,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
     console.log('Running "npm run build"')
     await this.runcmd('npm run build', this.outdir);
   }
+  async publish() {
+    await this.runcmd('npm publish', this.outdir);
+  }
 }
