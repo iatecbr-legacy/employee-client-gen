@@ -1,5 +1,5 @@
 const CONFIG = require('./config.json');
-const BaseGenerator = require('./generators/BaseGenerator');
+const GeneratorFactory = require('./generators/GeneratorFactory');
 
 const program = require('commander');
 
@@ -14,7 +14,7 @@ if (args.length <=0) {
     console.log('Missing FORMAT argument');
 } else {
     let format = args[0];
-    let generator = BaseGenerator.createGenerator(format);
+    let generator = new GeneratorFactory().createGenerator(format);
     console.log(generator);
     generator.generate()
         .catch(err=>console.error(err))
