@@ -9,8 +9,7 @@ module.exports = class BaseGenerator {
   constructor(format) {    
     this.format = format;
     this.CODEGEN_VERSION = '2.2.3';
-    this.SPEC_VERSION = '1.0.0-preview-1';
-    this.SPEC_URL = util.format('https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml', this.SPEC_VERSION);
+    this.SPEC_URL = util.format('https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml', CONFIG.version);
     this.options = CONFIG.formatOptions[format];
     
     this.outdir = 'output/' + this.options.languageArgs.npmName;
@@ -41,7 +40,7 @@ module.exports = class BaseGenerator {
     ];
     if ('languageArgs' in this.options) {
       if ('languageArgVersionName' in this.options) {
-        this.options.languageArgs[this.options.languageArgVersionName] = this.SPEC_VERSION;
+        this.options.languageArgs[this.options.languageArgVersionName] = CONFIG.version;
       }
       Object.keys(this.options.languageArgs).forEach(k=> {
         javaArgs.push(`-D${k}=${this.options.languageArgs[k]}`);
@@ -79,7 +78,7 @@ module.exports = class BaseGenerator {
       [`commit -m "Auto-generated commit"`, true],
       [`remote add origin https://github.com/${user_name}/${repo_name}.git`, true],
       [`pull origin master --allow-unrelated -s recursive -X ours`, ],
-      [`tag -f ${this.SPEC_VERSION}`, ],
+      [`tag -f ${CONFIG.version}`, ],
       [`push --tags -u origin master`, ],
     ];
     for (let g of gitCommands) {
