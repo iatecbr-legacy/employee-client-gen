@@ -3,10 +3,11 @@ const CONFIG = require('../config.json');
 module.exports = class GeneratorFactory {
     createGenerator(format) {
         if (format in CONFIG.generators) {
-            var genclass = require(`../generators/${CONFIG.generators[format]}`);
+            var genName = CONFIG.generators[format];
         } else {
-            var genclass = require(`../generators/${CONFIG.defaultGenerator}`);
+            var genName = CONFIG.defaultGenerator;
         }
+        let genclass = require(`./${genName}`);
         return new genclass(format);
     }
 }

@@ -54,14 +54,20 @@ module.exports = class BaseGenerator {
     this.codegenName = await this.ensureCodegen();
     await this.runCodegen();
   }
-  runcmd(cmd, workingdir){
+  runcmd(cmd, workingdir, options = {}){
+    const defaults = {
+      stderrPipe: true,
+      stdoutPipe: true,
+    };
+    options = Object.assign(defaults, options)
     return new Promise((resolve, reject) => {
       let child = exec(cmd, {'cwd': workingdir || process.cwd() }, (err, stdout, stderr) =>{
         if (!err) resolve(stdout);
-        else reject(err);
+        else if (options.ignoreFailure, reject(err));
       });
-      child.stderr.pipe(process.stdout);
-      child.stdout.pipe(process.stdout);
+      if (options.stdoutPipe) child.stdout.pipe(process.stdout);
+      if (options.stderrPipe) child.stderr.pipe(process.stderr);
+      
     });
   }
   async gitPush() {
@@ -77,15 +83,16 @@ module.exports = class BaseGenerator {
       [`push --tags -u origin master`, ],
     ];
     for (let g of gitCommands) {
+      let canFail = g.length > 1 && g[1];
       try {
-        await this.runcmd('git ' + g[0], this.outdir);
+        await this.runcmd('git ' + g[0], this.outdir, {stderrPipe: !canFail});
       } catch (err) {
-        if (g.length <= 1 || !g[1])
+        if (!canFail)
           throw err;
       }
     }
   }
   async publish() {
-    throw 'Not implemented for this format'.
+    throw 'Not implemented for this format';
   }
 }
