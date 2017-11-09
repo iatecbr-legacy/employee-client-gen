@@ -11,6 +11,7 @@ module.exports = class BaseGenerator {
     this.SPEC_VERSION = '1.0.0-preview-1';
     this.SPEC_URL = util.format('https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml', this.SPEC_VERSION);
     this.options = CONFIG.formatOptions[format];
+    this.outdir = 'output/' + this.options.languageArgs.npmName;
   }
   
   ensureCodegen() {
@@ -46,8 +47,9 @@ module.exports = class BaseGenerator {
     console.log('Running codegen...');
     await this.runcmd('java ' + javaArgs.join(' '));
   }
-  generate() {
+  async generate() {
     this.codegenName = this.ensureCodegen();
+    await this.runCodegen();
   }
   runcmd(cmd, workingdir){
     return new Promise((resolve, reject) => {

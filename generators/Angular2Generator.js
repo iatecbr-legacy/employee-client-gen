@@ -4,24 +4,15 @@ const path = require('path');
 
 const BaseGenerator = require('./BaseGenerator')
 
-function removedirs(dirs) {
-  for (let dir of dirs) {
-    if (fs.existsSync(dir) && fs.lstatSync(dir).isDirectory())
-      shutil.rmtree(dir);
-  }
-}
 module.exports = class Angular2Generator extends BaseGenerator {
   async generate() {
     super.generate();
     
-    this.outdir = 'output/' + this.options.languageArgs.npmName;
     this.pkgfilename = this.outdir + '/package.json';
     
     let pkgdict = this.options.packagesToUpdate;
     this.pkgs2update = Object.keys(pkgdict).map(x=> new Object({ key: x, value: pkgdict[x]}));
-    //removedirs(['api','model']);
 
-    await this.runCodegen();
     await this.npmInstall();
     await this.fixBuildScript();
     await this.updatePackages();
