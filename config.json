@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-preview-3",
+    "version": "1.0.0-preview-5",
     "gitHubUsername": "iatecbr",
     "defaultGenerator": "BaseGenerator",
     "generators": {

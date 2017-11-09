@@ -21,6 +21,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
     await this.updatePeers();
     await this.fixOpaqueToken();
     await this.createModule();
+    await this.removeTsFiles();
     await this.build();
   }
   async fixBuildScript() {
@@ -81,6 +82,13 @@ module.exports = class Angular2Generator extends BaseGenerator {
   async build() {
     console.log('Running "npm run build"')
     await this.runcmd('npm run build', this.outdir);
+  }
+  async removeTsFiles() {
+    await Promise.all(
+      rimraf(outdir + "/**/*.js"),
+      rimraf(outdir + "/**/*.js.map"),
+      rimraf(outdir + "/**/*.d.ts")
+    );
   }
   async publish(argv) {
     await this.runcmd('npm publish', this.outdir);

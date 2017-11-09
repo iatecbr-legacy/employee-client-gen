@@ -1,5 +1,6 @@
 .npmignore
 .gitignore
+.swagger-codegen
 
 /**/*.ts
 !/**/*.d.ts
