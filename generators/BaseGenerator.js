@@ -37,18 +37,19 @@ module.exports = class BaseGenerator {
       '-l', 'typescript-angular2',
       '-o', this.outdir,
     ];
-    if ('languageArgs' in this.options) {
-      if ('_versionNameKey' in this.options) {
-        this.options.languageArgs[this.options._versionNameKey] = CONFIG.version;
-      }
-      if ('_packageNameKey' in this.options) {
-        this.options.languageArgs[this.options._packageNameKey] = CONFIG.packageName;
-      }
-      Object.keys(this.options.languageArgs).forEach(k=> {
-        javaArgs.push(`-D${k}=${this.options.languageArgs[k]}`);
-      });
+    if (!('languageArgs' in this.options)) {
+      this.options.languageArgs = {};
     }
-    console.log('Running codegen...');
+    if ('_versionNameKey' in this.options) {
+      this.options.languageArgs[this.options._versionNameKey] = CONFIG.version;
+    }
+    if ('_packageNameKey' in this.options) {
+      this.options.languageArgs[this.options._packageNameKey] = CONFIG.packageName;
+    }
+    Object.keys(this.options.languageArgs).forEach(k=> {
+      javaArgs.push(`-D${k}=${this.options.languageArgs[k]}`);
+    });
+    console.log('Running codegen...', javaArgs.join(' '));
     await this.runcmd('java ' + javaArgs.join(' '));
   }
   async generate() {
