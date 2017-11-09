@@ -22,7 +22,7 @@ if (argv <=2) {
 let format = argv.splice(0,1)[0].toLowerCase();
 let command = argv.splice(0,1)[0].toLowerCase();
 
-console.log('ARGS', format, command);
+let generator = new GeneratorFactory().createGenerator(format);
 switch(command) {
     case 'gen':
     case 'generate':
