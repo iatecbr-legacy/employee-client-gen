@@ -17,8 +17,8 @@
     "url": "https://github.com/iatecbr/employee-client-gen/issues"
   },
   "homepage": "https://github.com/iatecbr/employee-client-gen#readme",
-  "devDependencies": {},
-  "dependencies": {
+  "devDependencies": {
     "rimraf": "^2.6.2"
-  }
+  },
+  "dependencies": {}
 }
