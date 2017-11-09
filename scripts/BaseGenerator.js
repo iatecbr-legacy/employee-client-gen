@@ -14,6 +14,7 @@ class BaseGenerator {
       this.options = null;
     }
   }
+  
   ensureCodegen() {
     let codegenName = util.format(`swagger-codegen-cli-%s.jar`, this.CODEGEN_VERSION);
     if (fs.existsSync(codegenName)) {
@@ -27,6 +28,25 @@ class BaseGenerator {
       });
     }
     return codegenName;
+  }
+  async runCodegen() {
+    let javaArgs = [
+      '-jar', this.codegenName,
+      'generate',
+      '-i', this.SPEC_URL,
+      '-l', 'typescript-angular2',
+      '-o', this.outdir,
+    ];
+    if ('languageArgs' in this.options) {
+      if ('languageArgVersionName' in this.options) {
+        this.options.languageArgs[this.options.languageArgVersionName] = this.SPEC_VERSION;
+      }
+      Object.keys(this.options.languageArgs).forEach(k=> {
+        javaArgs.push(`-D${k}=${this.options.languageArgs[k]}`);
+      });
+    }
+    console.log('Running codegen...');
+    await this.runcmd('java ' + javaArgs.join(' '));
   }
   generate() {
     this.codegenName = this.ensureCodegen();

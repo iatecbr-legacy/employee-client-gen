@@ -1,8 +1,8 @@
 {
+  "languageArgVersionName": "npmVersion",
   "languageArgs": {
     "npmName": "iatec-ng-employeeclient"
   },
-  "languageArgVersionName": "npmVersion",
   "packagesToUpdate": {
       "@angular/common": "^5.0.0",
       "@angular/compiler": "^5.0.0",

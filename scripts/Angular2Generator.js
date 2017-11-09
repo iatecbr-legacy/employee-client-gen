@@ -14,15 +14,14 @@ module.exports = class Angular2Generator extends BaseGenerator {
   async generate() {
     super.generate();
     
-    this.npmPackageName = 'iatec-ng-employeeclient';
-    this.outdir = 'gen/' + this.npmPackageName;
+    this.outdir = 'gen/' + this.options.languageArgs.npmName;
     this.pkgfilename = this.outdir + '/package.json';
     
     let pkgdict = this.options.packagesToUpdate;
     this.pkgs2update = Object.keys(pkgdict).map(x=> new Object({ key: x, value: pkgdict[x]}));
     //removedirs(['api','model']);
 
-    await this.generateProject();
+    await this.runCodegen();
     await this.npmInstall();
     await this.fixBuildScript();
     await this.updatePackages();
@@ -30,25 +29,6 @@ module.exports = class Angular2Generator extends BaseGenerator {
     await this.fixOpaqueToken();
     await this.createModule();
     await this.build();
-  }
-  async generateProject() {
-    let langArgs = {
-      'npmVersion': this.SPEC_VERSION,
-      'npmName': this.npmPackageName,
-    };
-    let javaArgs = [//'java',
-      '-jar', this.codegenName,
-      'generate',
-      '-i', this.SPEC_URL,
-      '-l', 'typescript-angular2',
-      '-o', this.outdir,
-    ];
-    for (let k of Object.keys(langArgs)) {
-      let v = langArgs[k];
-      javaArgs = javaArgs.concat(util.format('-D%s=%s', k, v));
-    }
-    console.log('Running codegen...');
-    await this.runcmd('java ' + javaArgs.join(' '));
   }
   async fixBuildScript() {
     console.log(`Fixing package.json build script from ${this.outdir}...`);
