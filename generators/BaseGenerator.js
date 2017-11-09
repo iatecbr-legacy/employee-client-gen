@@ -65,6 +65,18 @@ module.exports = class BaseGenerator {
     });
   }
   async gitPush() {
-
+    let user_name = '';
+    let repo_name = '';
+    let gitCommands = [
+      `init`,
+      `add .`,
+      `commit -m "Auto-generated commit"`,
+      `remote add origin https://github.com/${user_name}/${repo_name}.git`,
+      `git tag ${this.SPEC_VERSION}`,
+      `push -u origin master`,
+    ];
+    for (let g of gitCommands) {
+      await runcmd('git ' + g, this.outdir);
+    }
   }
 }
