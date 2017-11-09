@@ -36,8 +36,8 @@ module.exports = class Angular2Generator extends BaseGenerator {
     fs.unlinkSync(this.outdir + '/typings.json')
     
     let pkgs = this.pkgs2update.map(x=>`${x.key}@${x.value}`).join(' ');
-    console.log('Updating node packages...');
-    await this.runcmd('npm install --save-dev' + pkgs, this.outdir);
+    console.log('Updating node packages...', pkgs);
+    await this.runcmd('npm install ' + pkgs + ' --save-dev', this.outdir);
   }
   async updatePeers() {
     console.log('Updating peer dependencies...');
