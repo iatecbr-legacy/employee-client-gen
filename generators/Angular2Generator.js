@@ -62,6 +62,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
           obj.peerDependencies[pkg.key] = pkg.value;
         }
       }
+      return obj;
     });
   }
   async fixOpaqueToken() {
