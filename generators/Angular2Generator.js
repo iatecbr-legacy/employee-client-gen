@@ -10,6 +10,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
     await super.generate();
     
     this.pkgfilename = this.outdir + '/package.json';
+    this.tsconfigfilename = this.outdir + '/tsconfig.json';
     
     let pkgdict = this.options.packagesToUpdate;
     this.pkgs2update = Object.keys(pkgdict).map(x=> new Object({ key: x, value: pkgdict[x]}));
@@ -24,9 +25,19 @@ module.exports = class Angular2Generator extends BaseGenerator {
   }
   async fixBuildScript() {
     console.log(`Fixing package.json build script from ${this.outdir}...`);
+    
     let pkgjson = JSON.parse(fs.readFileSync(this.pkgfilename));
-    pkgjson.scripts.build = pkgjson.scripts.build.replace("typings install && ", "");
+    delete pkgjson.scripts.postInstall;
+    pkgjson.scripts.build = 'tsc';
+    pkgjson.scripts.prepublish = 'npm run build';
     await fs.writeFileSync(this.pkgfilename, JSON.stringify(pkgjson, null, 2));
+    
+    let tsconfigjson = JSON.parse(fs.readFileSync(this.tsconfigfilename));
+    tsconfigjson.exclude = tsconfigjson.exclude.filter(x=>!x.startsWith('typings/'));
+    delete tsconfigjson.compilerOptions.outDir;
+    tsconfigjson.compilerOptions.lib = ["es2015", "es2015.iterable", "dom"];
+    await fs.writeFileSync(this.tsconfigfilename, JSON.stringify(tsconfigjson, null, 2));
+
   }
   async updatePackages() {
     let result;
