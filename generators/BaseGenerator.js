@@ -77,7 +77,7 @@ module.exports = class BaseGenerator {
       `push --tags -u origin master`,
     ];
     for (let g of gitCommands) {
-      await runcmd('git ' + g, this.outdir);
+      await this.runcmd('git ' + g, this.outdir);
     }
   }
 }
