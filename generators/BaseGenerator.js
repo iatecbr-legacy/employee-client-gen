@@ -93,4 +93,9 @@ module.exports = class BaseGenerator {
   async publish() {
     throw 'Not implemented for this format';
   }
+  async updateJson(filename, func) {
+    let obj = JSON.parse(fs.readFileSync(filename));
+    obj = func(obj);
+    fs.writeFileSync(filename, JSON.stringify(obj, null, 2));
+  }
 }
