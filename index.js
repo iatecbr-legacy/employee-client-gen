@@ -19,22 +19,20 @@ if (argv <=2) {
     showUsage();
     process.exit();
 }
-let format = argv[0].toLowerCase();
-let command = argv[1].toLowerCase();
-let generator = new GeneratorFactory().createGenerator(format);
-
+let format = argv.splice(0,1)[0].toLowerCase();
+let command = argv.splice(0,1)[0].toLowerCase();
 
 console.log('ARGS', format, command);
 switch(command) {
     case 'gen':
     case 'generate':
-        generator.generate();
+        generator.generate(argv);
         break;
     case 'push':
-        generator.gitPush();
+        generator.gitPush(argv);
         break;    
     case 'publish':
-        generator.publish();
+        generator.publish(argv);
         break;   
         
     default:
