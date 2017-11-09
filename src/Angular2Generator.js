@@ -19,9 +19,12 @@ module.exports = class Angular2Generator extends BaseGenerator {
     //removedirs(['api','model']);
     
     await this.generateProject();
+    await this.npmInstall();
     await this.fixPkgJson();
     await this.changePackages();
     await this.fixOpaqueToken();
+    await this.createModule();
+    await this.build();
   }
   async generateProject() {
     let langArgs = {
@@ -40,12 +43,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
       javaArgs = javaArgs.concat(util.format('-D%s=%s', k, v));
     }
     console.log('Running codegen...');
-    // try {
     await this.runcmd('java ' + javaArgs.join(' '));
-    //   console.log('Codegen success.');
-    // } catch (err) {
-    //   console.error(err.toString());
-    // }
   }
   async fixPkgJson() {
     console.log(`Fixing package.json build script from ${this.outdir}...`);
@@ -57,14 +55,9 @@ module.exports = class Angular2Generator extends BaseGenerator {
   async changePackages() {
     let result;
 
-    console.log('Running npm install')
-    result = await this.runcmd('npm install', this.outdir);
-    if (!result) throw 'Could not run npm install: ' + result;
-
     console.log('Removing the typings package...');
-    result = await this.runcmd('npm uninstall --save-dev --save-peer typings', this.outdir);
-    if (!result) throw 'Could not remove typings: ' + result;
-
+    await this.runcmd('npm uninstall --save-dev --save-peer typings', this.outdir);
+   
     let pkglist = [
       "@angular/common@^5.0.0",
       "@angular/compiler@^5.0.0",
@@ -78,8 +71,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
     ]
     let pkgs = pkglist.join(' ');
     console.log('Updating node packages...')
-    result = await this.runcmd('npm install --save-dev --save-peer ' + pkgs, this.outdir);
-    if (!result) throw 'Could not update the node packages: ' + result;
+    await this.runcmd('npm install --save-dev --save-peer ' + pkgs, this.outdir);
   }
   async fixOpaqueToken() {
     console.log(`Fixing package.json build script from ${this.outdir}...`);
@@ -87,5 +79,19 @@ module.exports = class Angular2Generator extends BaseGenerator {
     let content = fs.readFileSync(pkgfilename).toString();
     content = content.split('OpaqueToken').join('InjectionToken');
     await fs.writeFileSync(pkgfilename, content);
+  }
+  async createModule() {
+    let src = 'assets/angular2-api.module.ts';
+    let dst = this.outdir + '/api.module.ts';
+    fs.copyFileSync(src,dst);
+    fs.appendFileSync(this.outdir + '/index.ts', "\r\nexport * from './api.module';");
+  }
+  async npmInstall() {
+    console.log('Running "npm install"')
+    await this.runcmd('npm install', this.outdir);    
+  }
+  async build() {
+    console.log('Running "npm run build"')
+    await this.runcmd('npm run build', this.outdir);
   }
 }
