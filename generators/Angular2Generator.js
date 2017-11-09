@@ -1,6 +1,7 @@
 const util = require('util');
 const fs = require('fs');
 const path = require('path');
+const rimraf = util.promisify(require('rimraf'));
 
 const BaseGenerator = require('./BaseGenerator')
 
@@ -33,7 +34,8 @@ module.exports = class Angular2Generator extends BaseGenerator {
     console.log('Removing the typings package...');
     await this.runcmd('npm uninstall --save-dev typings', this.outdir);
 
-    fs.unlinkSync(this.outdir + '/typings.json')
+    fs.unlinkSync(this.outdir + '/typings.json');
+    await rimraf(this.outdir + '/typings');
     
     let pkgs = this.pkgs2update.map(x=>`${x.key}@${x.value}`).join(' ');
     console.log('Updating node packages...', pkgs);
