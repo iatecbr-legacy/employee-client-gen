@@ -30,7 +30,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
       this.updateJson(this.pkgfilename, obj=> {
         delete obj.scripts.postInstall;
         obj.scripts.build = 'tsc';
-        obj.scripts.prepublish = 'npm run build';
+        obj.scripts.prepublishOnly = 'npm run build';
         return obj;  
       }),
       this.updateJson(this.tsconfigfilename, obj=>{
