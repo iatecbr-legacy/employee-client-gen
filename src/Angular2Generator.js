@@ -18,17 +18,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
     this.outdir = 'gen/' + this.npmPackageName;
     this.pkgfilename = this.outdir + '/package.json';
     
-    let pkgdict = {
-      "@angular/common": "^5.0.0",
-      "@angular/compiler": "^5.0.0",
-      "@angular/core": "^5.0.0",
-      "@angular/http": "^5.0.0",
-      "@angular/platform-browser": "^5.0.0",
-      "core-js": "^2.4.1",
-      "rxjs": "^5.5.2",
-      "typescript": "^2.4.2",
-      "zone.js": "^0.8.14"
-    };
+    let pkgdict = this.options.packagesToUpdate;
     this.pkgs2update = Object.keys(pkgdict).map(x=> new Object({ key: x, value: pkgdict[x]}));
     //removedirs(['api','model']);
 

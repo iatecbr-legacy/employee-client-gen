@@ -1,4 +1,4 @@
 {
-    "DEFAULT": "GenericGenerator",
+    "DEFAULT": "BaseGenerator",
     "angular2": "Angular2Generator"
 }

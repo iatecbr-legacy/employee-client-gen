@@ -3,10 +3,16 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 
 class BaseGenerator {
-  constructor() {
+  constructor(format) {
+    this.format = format;
     this.CODEGEN_VERSION = '2.2.3';
     this.SPEC_VERSION = '1.0.0-preview-1';
     this.SPEC_URL = util.format('https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml', this.SPEC_VERSION);
+    try {
+      this.options = require(`../options/${format}.json`);
+    } catch (err) { 
+      this.options = null;
+    }
   }
   ensureCodegen() {
     let codegenName = util.format(`swagger-codegen-cli-%s.jar`, this.CODEGEN_VERSION);

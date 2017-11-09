@@ -7,14 +7,12 @@ if (args.length <=0) {
     let format = args[0].toLowerCase();
     if (format in generators) {
         console.log('Found generator for', format);
-        let clss = require(`./${generators[format]}`);
-        var generator = new clss();
+        var genclass = require(`./${generators[format]}`);
     } else {
         console.log('Using default generator')
-        let importName = `./${generators['DEFAULT']}`;
-        let clss = require(importName)(format);
-        var generator = new clss(format)
+        var genclass = require(`./${generators['DEFAULT']}`);
     }
+    let generator = new genclass(format);
     console.log(generator);
     generator.generate()
         .catch(err=>console.error(err))
