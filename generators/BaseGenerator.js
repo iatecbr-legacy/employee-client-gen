@@ -72,7 +72,7 @@ module.exports = class BaseGenerator {
       `add .`,
       `commit -m "Auto-generated commit"`,
       `remote add origin https://github.com/${user_name}/${repo_name}.git`,
-      `git tag ${this.SPEC_VERSION}`,
+      `tag ${this.SPEC_VERSION}`,
       `push -u origin master`,
     ];
     for (let g of gitCommands) {
