@@ -1,2 +1,2 @@
 #!/bin/bash
-node src/generate.js $1
+node scripts/generate.js $*
