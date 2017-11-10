@@ -11,7 +11,7 @@ module.exports = class BaseGenerator {
     this.CODEGEN_VERSION = '2.2.3';
     this.SPEC_URL = util.format('https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml', CONFIG.version);
     this.options = CONFIG.formatOptions[format];
-    this.outdir = 'output/' + this.options.packageName;
+    this.outdir = 'output/' + format;
   }
   
   async ensureCodegen() {
@@ -77,11 +77,11 @@ module.exports = class BaseGenerator {
     let repo_name = this.options.packageName;
     let gitCommands = [
       [`init`, ],
-      [`add .`, ],
-      [`commit -m "Auto-generated commit"`, true],
       [`remote rm origin`, true],
       [`remote add origin https://github.com/${user_name}/${repo_name}.git`, ],
       [`pull origin master --allow-unrelated -s recursive -X ours`, ],
+      [`add .`, ],
+      [`commit -m "Auto-generated commit"`, true],
       [`tag -f ${CONFIG.version}`, ],
       [`push --tags -u origin master`, ],
     ];
