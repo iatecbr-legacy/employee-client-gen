@@ -95,6 +95,6 @@ module.exports = class Angular2Generator extends BaseGenerator {
     ]);
   }
   async publish(argv) {
-    await this.runcmd('npm publish', this.outdir);
+    await this.runcmd('npm publish --access public', this.outdir);
   }
 }
