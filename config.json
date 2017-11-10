@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-preview-5",
+    "version": "1.0.0-preview-6",
     "gitHubUsername": "iatecbr",
     "defaultGenerator": "BaseGenerator",
     "generators": {
@@ -7,7 +7,7 @@
     },
     "formatOptions": {
         "angular2": {
-            "packageName": "iatec-ng-employeeclient",
+            "packageName": "@iatec/ng2-employeeclient",
             "_versionNameKey": "npmVersion",
             "_packageNameKey": "npmName",
             "packagesToUpdate": {

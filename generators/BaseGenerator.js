@@ -44,7 +44,7 @@ module.exports = class BaseGenerator {
       this.options.languageArgs[this.options._versionNameKey] = CONFIG.version;
     }
     if ('_packageNameKey' in this.options) {
-      this.options.languageArgs[this.options._packageNameKey] = CONFIG.packageName;
+      this.options.languageArgs[this.options._packageNameKey] = this.options.packageName;
     }
     Object.keys(this.options.languageArgs).forEach(k=> {
       javaArgs.push(`-D${k}=${this.options.languageArgs[k]}`);
