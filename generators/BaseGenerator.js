@@ -34,7 +34,7 @@ module.exports = class BaseGenerator {
       '-jar', this.codegenName,
       'generate',
       '-i', this.SPEC_URL,
-      '-l', 'typescript-angular2',
+      '-l', this.options.language || this.format,
       '-o', this.outdir,
     ];
     if (!('languageArgs' in this.options)) {
