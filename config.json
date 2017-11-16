@@ -2,6 +2,7 @@
     "version": "1.0.0-preview-6",
     "gitHubUsername": "iatecbr",
     "defaultGenerator": "BaseGenerator",
+    "specUrlFormat": "https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml",
     "generators": {
         "angular2": "Angular2Generator"
     },
