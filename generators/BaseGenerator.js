@@ -9,7 +9,7 @@ module.exports = class BaseGenerator {
   constructor(format) {    
     this.format = format;
     this.CODEGEN_VERSION = '2.2.3';
-    this.SPEC_URL = util.format(this.options.specUrlFormat, CONFIG.version);
+    this.SPEC_URL = util.format(CONFIG.specUrlFormat, CONFIG.version);
     this.options = CONFIG.formatOptions[format];
     this.outdir = 'output/' + format;
   }
