@@ -16,6 +16,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
     this.pkgs2update = Object.keys(pkgdict).map(x=> new Object({ key: x, value: pkgdict[x]}));
 
     await this.npmInstall();
+    await this.addRepository();
     await this.fixBuildScript();
     await this.updatePackages();
     await this.updatePeers();
@@ -23,6 +24,16 @@ module.exports = class Angular2Generator extends BaseGenerator {
     await this.createModule();
     await this.removeTsAndSetTsOutput();
     await this.build();
+  }
+  async addRepository() {
+    console.log('Adding git repository to the package.json file.');
+    await this.updateJson(this.pkgfilename, obj=> {
+      obj.repository = {
+        type: "git",
+        url: this.getGitHubRepoUrl(),
+      };
+      return obj;
+    });
   }
   async fixBuildScript() {
     console.log(`Fixing package.json build script from ${this.outdir}...`);

@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-preview-6",
+    "version": "1.0.0-preview-7",
     "gitHubUsername": "iatecbr",
     "defaultGenerator": "BaseGenerator",
     "specUrlFormat": "https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml",
@@ -10,6 +10,7 @@
         "angular2": {
             "language": "typescript-angular2",
             "packageName": "@iatec/ng2-employeeclient",
+            "gitRepository": "ng2-employeeclient",
             "_versionNameKey": "npmVersion",
             "_packageNameKey": "npmName",
             "packagesToUpdate": {

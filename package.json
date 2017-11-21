@@ -18,7 +18,8 @@
   },
   "homepage": "https://github.com/iatecbr/employee-client-gen#readme",
   "devDependencies": {
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "shelljs": "^0.7.8"
   },
   "dependencies": {}
 }
