@@ -5,6 +5,7 @@ const fs = require('fs');
 const exec = require('child_process').exec;
 const http = require('http');
 const shell = require('shelljs');
+const rimraf = util.promisify(require('rimraf'));
 
 module.exports = class BaseGenerator {
   constructor(format) {    
@@ -58,7 +59,7 @@ module.exports = class BaseGenerator {
     await this.runcmd('git init .', this.outdir);
     await this.runcmd('git remote add origin ' + this.getGitHubRepoUrl(), this.outdir);
     await this.runcmd('git pull origin master', this.outdir);
-    await shell.rm('-r', '*', this.outdir);
+    await rimraf(this.outdir + "/*");
     this.codegenName = await this.ensureCodegen();
     await this.runCodegen();
   }
