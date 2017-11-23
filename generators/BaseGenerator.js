@@ -57,8 +57,13 @@ module.exports = class BaseGenerator {
   async generate() {
     shell.mkdir('-p', this.outdir);
     await this.runcmd('git init .', this.outdir);
-    await this.runcmd('git remote add origin ' + this.getGitHubRepoUrl(), this.outdir);
+    console.log('continuou 0');
+    try {
+      await this.runcmd('git remote add origin ' + this.getGitHubRepoUrl(), this.outdir);
+    } catch (ex) {}
+    console.log('continuou 1');
     await this.runcmd('git pull origin master', this.outdir);
+    console.log('continuou 2');
     await rimraf(this.outdir + "/*");
     this.codegenName = await this.ensureCodegen();
     await this.runCodegen();
