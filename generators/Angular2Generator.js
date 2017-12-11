@@ -15,7 +15,6 @@ module.exports = class Angular2Generator extends BaseGenerator {
     let pkgdict = this.options.packagesToUpdate;
     this.pkgs2update = Object.keys(pkgdict).map(x=> new Object({ key: x, value: pkgdict[x]}));
 
-    await this.npmInstall();
     await this.addRepository();
     await this.fixBuildScript();
     await this.updatePackages();
@@ -23,6 +22,7 @@ module.exports = class Angular2Generator extends BaseGenerator {
     await this.fixOpaqueToken();
     await this.createModule();
     await this.removeTsAndSetTsOutput();
+    await this.npmInstall();
     await this.build();
   }
   async addRepository() {
