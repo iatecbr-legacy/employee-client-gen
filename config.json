@@ -1,5 +1,5 @@
 {
-    "version": "1.0.0-preview-9",
+    "version": "1.0.0-preview-14",
     "gitHubUsername": "iatecbr",
     "defaultGenerator": "BaseGenerator",
     "specUrlFormat": "https://app.swaggerhub.com/apiproxy/schema/file/iatec/Employee/%s/swagger.yaml",
