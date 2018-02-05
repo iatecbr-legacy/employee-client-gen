@@ -8,20 +8,20 @@ const shell = require('shelljs');
 const rimraf = util.promisify(require('rimraf'));
 
 module.exports = class BaseGenerator {
-  constructor(format) {    
+  constructor(format) {
     this.format = format;
-    this.CODEGEN_VERSION = '2.2.3';
+    this.CODEGEN_VERSION = '2.3.0';
     this.SPEC_URL = util.format(CONFIG.specUrlFormat, CONFIG.version);
     this.options = CONFIG.formatOptions[format];
     this.outdir = 'output/' + format;
   }
-  
+
   async ensureCodegen() {
-    let codegenName = util.format(`swagger-codegen-cli-%s.jar`, this.CODEGEN_VERSION);
+    let codegenName = 'swagger-codegen-cli.jar';
     if (fs.existsSync(codegenName)) {
       console.log('Codegen was already downloaded');
     } else {
-      let codegenUrl = util.format('http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/%s/%s', this.CODEGEN_VERSION, codegenName);
+      let codegenUrl = util.format('http://central.maven.org/maven2/io/swagger/swagger-codegen-cli/%s/swagger-codegen-cli-%s.jar', this.CODEGEN_VERSION, this.CODEGEN_VERSION);
       console.log('Downloading codegen from', codegenUrl);
       let file = fs.createWriteStream(codegenName);
       http.get(codegenUrl, response => {
@@ -81,7 +81,7 @@ module.exports = class BaseGenerator {
       });
       if (options.stdoutPipe) child.stdout.pipe(process.stdout);
       if (options.stderrPipe) child.stderr.pipe(process.stderr);
-      
+
     });
   }
   getGitHubRepoUrl() {
