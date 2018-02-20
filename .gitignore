@@ -1,3 +1,4 @@
 *.jar
 output/
 node_modules/
+*.swp
